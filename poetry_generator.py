@@ -15,15 +15,17 @@ def upload_poems():
     url = "https://www.culture.ru/literature/poems"
     response = requests.get(url=url, headers=headers)
     soup = BeautifulSoup(response.text, 'lxml')
-    poems = soup.find_all('a', class_='card-heading_title-link')
+    poems = soup.find_all('a', class_='_2A3Np')
+    print(poems)
     for item in poems:
         poem_url = item.get('href')
         if poem_url is not None:
-            time.sleep(2)
+            time.sleep(3)
             url_personal_page = f"https://www.culture.ru{poem_url}"
+            print(url_personal_page)
             response_personal_page = requests.get(url=url_personal_page, headers=headers)
             soup = BeautifulSoup(response_personal_page.text, 'lxml')
-            poem_text = soup.find('div', class_='content-columns_block').text
+            poem_text = soup.find('div', class_='_3x8Cp').text
             poem_re = re.sub(r'([А-Я])', r' \n\1', poem_text)
             poem_list.append(poem_re)
             # print(poem_list)
