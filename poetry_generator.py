@@ -31,6 +31,43 @@ def upload_poems():
                 json.dump(poem_list, file, indent=4, ensure_ascii=False)
     return True
 
+def get_random_poem():
+    with open("poem_list_m.json", encoding="UTF-8-sig") as file:
+        poem_text = json.load(file)
+    first_verse = random.choice(poem_text)
+    second_verse = random.choice(poem_text)
+    third_verse = random.choice(poem_text)
+    all_verse = first_verse + "\n" + second_verse + "\n" + third_verse
+    poem_label.configure(text=all_verse)
+    win.clipboard_append(all_verse)
+    print(f"{all_verse}")
+    return all_verse
 
+def update_poem_list():
+    checkState = upload_poems()
+    if checkState != True:
+        show_btn['state'] = 'disabled'
+    else:
+        show_btn['state'] = 'normal'
 
+win = tk.Tk()
+win.geometry(f"600x500+100+200")
 
+show_btn = tk.Button(win, text=f'Сгенерировать стих',
+                     command=get_random_poem,
+                     pady=10,
+                     bd=5,
+                     bg='white'
+                     )
+show_btn.place(x=180, y=300)
+update_btn = tk.Button(win, text=f'Обновить список',
+                       command=update_poem_list,
+                       pady=10,
+                       bd=5,
+                       bg='white'
+                       )
+update_btn.place(x=180, y=370)
+poem_label = tk.Label(win, text='', font=("Courier", 10, "italic"), pady=3)
+poem_label.pack()
+win.update()
+win.mainloop()
