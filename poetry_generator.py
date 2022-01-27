@@ -27,19 +27,20 @@ def upload_poems():
             soup = BeautifulSoup(response_personal_page.text, 'lxml')
             poem_text = soup.find('div', class_='_3x8Cp').text
             poem_re = re.sub(r'([А-Я])', r' \n\1', poem_text)
-            poem_list.append(poem_re)
+            poem_split = '\n'.join(poem_re.split('\n')[1:5])
+            poem_list.append(poem_split)
             # print(poem_list)
-            with open("poem_list_m.json", "w", encoding="utf-8-sig") as file:
+            with open("poem_list.json", "w", encoding="utf-8-sig") as file:
                 json.dump(poem_list, file, indent=4, ensure_ascii=False)
     return True
 
 def get_random_poem():
-    with open("poem_list_m.json", encoding="UTF-8-sig") as file:
+    with open("poem_list.json", encoding="UTF-8-sig") as file:
         poem_text = json.load(file)
     first_verse = random.choice(poem_text)
     second_verse = random.choice(poem_text)
     third_verse = random.choice(poem_text)
-    all_verse = first_verse + "\n" + second_verse + "\n" + third_verse
+    all_verse = first_verse + "\n *** \n" + second_verse + "\n *** \n" + third_verse
     poem_label.configure(text=all_verse)
     win.clipboard_append(all_verse)
     print(f"{all_verse}")
@@ -61,14 +62,14 @@ show_btn = tk.Button(win, text=f'Сгенерировать стих',
                      bd=5,
                      bg='white'
                      )
-show_btn.place(x=180, y=300)
+show_btn.place(x=500, y=50)
 update_btn = tk.Button(win, text=f'Обновить список',
                        command=update_poem_list,
                        pady=10,
                        bd=5,
                        bg='white'
                        )
-update_btn.place(x=180, y=370)
+update_btn.place(x=500, y=120)
 poem_label = tk.Label(win, text='', font=("Courier", 10, "italic"), pady=3)
 poem_label.pack()
 win.update()
